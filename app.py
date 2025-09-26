@@ -1,16 +1,14 @@
-import pickle
+import joblib
 import pandas as pd
 import streamlit as st
 
 encoder_path = 'onehot_encoder'
 scaler_path = 'scaler'
 model_path = 'best_model_RF'
-with open(encoder_path, 'rb') as f:
-    encoder = pickle.load(f)
-with open(scaler_path, 'rb') as f:
-    scaler = pickle.load(f)
-with open(model_path, 'rb') as f:
-    model = pickle.load(f)
+
+encoder = joblib.load(encoder_path)
+scaler = joblib.load(scaler_path)
+model = joblib.load(model_path)
 
 st.title('Asthma Prediction App')
 st.write('Enter your details to predict asthma risk:')
