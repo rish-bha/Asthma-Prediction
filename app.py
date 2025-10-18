@@ -72,7 +72,7 @@ except Exception as e:
 # Default values
 default_humidity = 65
 default_pressure = 1009
-default_temperature = 29
+default_temperature = 84
 default_wind_speed = 15
 
 # Pre-fill with weather data if available
@@ -80,10 +80,12 @@ if weather_data:
        st.write("Fetched current weather data for Fremont, CA")
        default_humidity = weather_data.get('main', {}).get('humidity', default_humidity)
        default_pressure = weather_data.get('main', {}).get('pressure', default_pressure)
-       # Convert Kelvin to Celsius for temperature
-       default_temperature = round(weather_data.get('main', {}).get('temp', 302.15) - 273.15)
+       # Convert Kelvin to Fahrenheit for temperature
+       kelvin_temp = weather_data.get('main', {}).get('temp', 302.15)
+       default_temperature = round((kelvin_temp - 273.15) * 9/5 + 32)
        default_wind_speed = round(weather_data.get('wind', {}).get('speed', default_wind_speed))
 
+uvindex_default = 0
 if uvi_data:
        uvi_value = uvi_data.get('value', 0)
        if uvi_value < 5:
@@ -101,7 +103,7 @@ smoking_habit = st.selectbox('Smoking Habit', smoking_habit_options, index=0)
 uvindex = st.selectbox('UV Index', uvindex_options, index=uvindex_default)
 humidity = st.number_input('Humidity', min_value=0, max_value=100, value=default_humidity)
 pressure = st.number_input('Pressure', min_value=900, max_value=1100, value=default_pressure)
-temperature = st.number_input('Temperature', min_value=-20, max_value=60, value=default_temperature)
+temperature = st.number_input('Temperature', min_value=-4, max_value=140, value=default_temperature)
 wind_speed = st.number_input('Wind Speed', min_value=0, max_value=100, value=default_wind_speed)
 
 
