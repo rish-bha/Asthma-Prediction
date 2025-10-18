@@ -25,7 +25,7 @@ outdoor_activities_options = ['Extremely likely', 'Neither likely or dislikely',
        'Not at all likely']
 smoking_habit_options = ['No', 'Yes']
 uvindex_options = ['Low', 'Extreme']
-scores_interpretation = ['Very poor control', 'Poor control', 'Fair control', 'Excellent control']
+scores_interpretation = ['Your asthma is predicted to be in very poor control', 'Your asthma is predicted to be in poor control', 'Your asthma is predicted to be in fair control', 'Your asthma is predicted to be in excellent control']
 #20-25: Excellent control
 #16-19: Fair control
 # 12-15: Poor control
@@ -141,12 +141,26 @@ if st.button('Predict'):
        st.write(f'Predicted Asthma Risk: {prediction}')
 
        if prediction >= 0 and prediction <= 11:
-              st.write(scores_interpretation[0])
+              color = 'red'
+              status = scores_interpretation[0]
        elif prediction >= 12 and prediction <= 15:
-              st.write(scores_interpretation[1])
+              color = 'orange'
+              status = scores_interpretation[1]
        elif prediction >= 16 and prediction <= 19:
-              st.write(scores_interpretation[2])
+              color = 'yellow'
+              status = scores_interpretation[2]
        elif prediction >= 20 and prediction <= 25:
-              st.write(scores_interpretation[3])
+              color = 'green'
+              status = scores_interpretation[3]
        else:
               st.write("Invalid score")
+
+       st.markdown(
+       f"""
+       <div style='text-align:center;'>
+              <h2 style='color:{color}; font-size:36px;'>Asthma Score: {prediction}</h2>
+              <h3 style='color:{color};'>{status}</h3>
+       </div>
+       """,
+       unsafe_allow_html=True
+       )
