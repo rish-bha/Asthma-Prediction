@@ -173,15 +173,15 @@ if st.button('Predict'):
        }}
 
        .score-text {{
-              color: white;
-              font-size: 28px;
+              color: black;
+              font-size: 36px;
               font-weight: bold;
               margin-bottom: 10px;
        }}
 
        .status-text {{
-              color: white;
-              font-size: 22px;
+              color: black;
+              font-size: 36px;
               font-weight: 500;
        }}
        </style>
