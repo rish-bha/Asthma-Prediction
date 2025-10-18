@@ -25,6 +25,11 @@ outdoor_activities_options = ['Extremely likely', 'Neither likely or dislikely',
        'Not at all likely']
 smoking_habit_options = ['No', 'Yes']
 uvindex_options = ['Low', 'Extreme']
+scores_interpretation = ['Very poor control', 'Poor control', 'Fair control', 'Excellent control']
+#20-25: Excellent control
+#16-19: Fair control
+# 12-15: Poor control
+# 0-11: Very poor control
 lat=37.5485
 lon=-121.9886
 
@@ -134,3 +139,14 @@ if st.button('Predict'):
        prediction = prediction[0]
        st.subheader('Prediction Result:')
        st.write(f'Predicted Asthma Risk: {prediction}')
+
+       if prediction >= 0 and prediction <= 11:
+              st.write(scores_interpretation[0])
+       elif prediction >= 12 and prediction <= 15:
+              st.write(scores_interpretation[1])
+       elif prediction >= 16 and prediction <= 19:
+              st.write(scores_interpretation[2])
+       elif prediction >= 20 and prediction <= 25:
+              st.write(scores_interpretation[3])
+       else:
+              st.write("Invalid score")
