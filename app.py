@@ -140,13 +140,13 @@ if st.button('Predict'):
        st.subheader('Prediction Result:')
        st.write(f'Predicted Asthma Risk: {prediction}')
 
-       if prediction >= 0 and prediction <= 11:
+       if prediction >= 0 and prediction < 12:
               color = 'red'
               status = scores_interpretation[0]
-       elif prediction >= 12 and prediction <= 15:
+       elif prediction >= 12 and prediction < 16:
               color = 'orange'
               status = scores_interpretation[1]
-       elif prediction >= 16 and prediction <= 19:
+       elif prediction >= 16 and prediction < 20:
               color = 'yellow'
               status = scores_interpretation[2]
        elif prediction >= 20 and prediction <= 25:
