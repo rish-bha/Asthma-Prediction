@@ -157,9 +157,38 @@ if st.button('Predict'):
 
        st.markdown(
        f"""
-       <div style='text-align:center;'>
-              <h2 style='color:{color}; font-size:36px;'>Asthma Score: {prediction}</h2>
-              <h3 style='color:{color};'>{status}</h3>
+       <style>
+       @keyframes pulse {{
+              0% {{ transform: scale(1); box-shadow: 0 0 10px {color}; }}
+              50% {{ transform: scale(1.03); box-shadow: 0 0 25px {color}; }}
+              100% {{ transform: scale(1); box-shadow: 0 0 10px {color}; }}
+       }}
+
+       .score-box {{
+              background-color: {color};
+              border-radius: 15px;
+              padding: 20px;
+              text-align: center;
+              animation: pulse 2s infinite;
+       }}
+
+       .score-text {{
+              color: white;
+              font-size: 28px;
+              font-weight: bold;
+              margin-bottom: 10px;
+       }}
+
+       .status-text {{
+              color: white;
+              font-size: 22px;
+              font-weight: 500;
+       }}
+       </style>
+
+       <div class="score-box">
+              <p class="score-text">Asthma Score: {prediction}</p>
+              <p class="status-text">Status: {status}</p>
        </div>
        """,
        unsafe_allow_html=True
