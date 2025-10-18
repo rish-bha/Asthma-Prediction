@@ -1,3 +1,6 @@
 pandas
 joblib
 scikit-learn
+streamlit-geolocation
+requests
+streamlit
