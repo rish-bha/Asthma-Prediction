@@ -101,13 +101,14 @@ outdoor_job = st.selectbox('Outdoor Job', outdoor_job_options, index=0)
 outdoor_activities = st.selectbox('Outdoor Activities', outdoor_activities_options, index=2)
 smoking_habit = st.selectbox('Smoking Habit', smoking_habit_options, index=0)
 uvindex = st.selectbox('UV Index', uvindex_options, index=uvindex_default)
-humidity = st.number_input('Humidity', min_value=0, max_value=100, value=default_humidity)
-pressure = st.number_input('Pressure', min_value=900, max_value=1100, value=default_pressure)
-temperature = st.number_input('Temperature', min_value=-4, max_value=140, value=default_temperature)
+humidity = st.number_input('Humidity[%]', min_value=0, max_value=100, value=default_humidity)
+pressure = st.number_input('Pressure[bar]', min_value=900, max_value=1100, value=default_pressure)
+temperature = st.number_input('Temperature[°F]', min_value=-4, max_value=140, value=default_temperature)
 wind_speed = st.number_input('Wind Speed', min_value=0, max_value=100, value=default_wind_speed)
 
 
 if st.button('Predict'):
+       temperature = (temperature - 32) * 5/9
        user_data = pd.DataFrame([{
               "Age": age,
               "Gender": gender,
