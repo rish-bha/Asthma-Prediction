@@ -136,7 +136,7 @@ if st.button('Predict'):
        user_encoded[continuous_columns] = scaler.transform(user_encoded[continuous_columns])
 
        prediction = model.predict(user_encoded)
-       prediction = prediction[0]
+       prediction = int(prediction[0])
        st.subheader('Prediction Result:')
        st.write(f'Predicted Asthma Risk: {prediction}')
 
