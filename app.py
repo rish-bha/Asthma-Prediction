@@ -82,9 +82,9 @@ if weather_data:
 if uvi_data:
        uvi_value = uvi_data.get('value', 0)
        if uvi_value < 5:
-              uvindex_default = 'Low'
+              uvindex_default = 0
        else:
-              uvindex_default = 'Extreme'
+              uvindex_default = 1
 
 
 # Streamlit input fields with pre-filled values
@@ -93,7 +93,7 @@ gender = st.selectbox('Gender', gender_options, index=0)
 outdoor_job = st.selectbox('Outdoor Job', outdoor_job_options, index=0)
 outdoor_activities = st.selectbox('Outdoor Activities', outdoor_activities_options, index=2)
 smoking_habit = st.selectbox('Smoking Habit', smoking_habit_options, index=0)
-uvindex = st.selectbox('UV Index', uvindex_options, index=0, value=uvindex_default)
+uvindex = st.selectbox('UV Index', uvindex_options, index=uvindex_default)
 humidity = st.number_input('Humidity', min_value=0, max_value=100, value=default_humidity)
 pressure = st.number_input('Pressure', min_value=900, max_value=1100, value=default_pressure)
 temperature = st.number_input('Temperature', min_value=-20, max_value=60, value=default_temperature)
