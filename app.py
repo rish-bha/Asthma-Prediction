@@ -150,7 +150,7 @@ if page == 'About The App':
 
        st.title("About The App")
        banner = Image.open('assets/asthma.jpg')
-       st.image(banner, use_column_width=True)
+       st.image(banner, use_container_width=True)
        st.markdown(
               """
               ## **What this app does**
