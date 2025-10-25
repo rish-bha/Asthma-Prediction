@@ -76,7 +76,7 @@ header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
 _set_background_image()
 
 @st.dialog('Prediction Result:')
-def prediction_dialog(prediction=prediction):
+def prediction_dialog(prediction):
        st.write(f'Predicted Asthma Risk: {prediction}')
 
        if prediction >= 0 and prediction < 12:
