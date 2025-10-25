@@ -136,26 +136,47 @@ def prediction_dialog(prediction):
 # Simple multipage navigation (Home / About The App)
 page = st.sidebar.radio('Page', ['About The App', 'Get Your Score'])
 if page == 'About The App':
-       st.title('About The App')
+       st.markdown(
+       """
+       <style>
+       h1 {
+              text-align: center;
+       }
+       </style>
+       """,
+       unsafe_allow_html=True
+       )
+
+       st.title("About The App")
        st.markdown(
               """
-              **What this app does**
+              ## **What this app does**
 
               This application predicts your asthma control score based on a short
               questionnaire (age, gender, outdoor job/activities, smoking habit) and current
               local weather conditions (temperature, humidity, pressure, wind speed, UV index).
               This can help you take preventive measures to manage your asthma exacerbations.
 
-              **How to use**
+              ## **How to use**
 
               1. Switch to the Home page.
-              2. Enter your city (the app will fetch local weather).
+              2. Enter your city (the app will fetch local weather data based on your city).
               3. Fill out or review pre-filled questionnaire fields and click Predict to see the score.
 
               """
        )
        #st.stop()
 else:
+       st.markdown(
+       """
+       <style>
+       h1 {
+              text-align: center;
+       }
+       </style>
+       """,
+       unsafe_allow_html=True
+       )
        st.title('Get Your Asthma Control Score')
 
        # Define options for categorical fields
