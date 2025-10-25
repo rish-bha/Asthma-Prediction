@@ -78,7 +78,7 @@ _set_background_image()
 st.title('Asthma Prediction App')
 
 # Simple multipage navigation (Home / About Us)
-page = st.sidebar.selectbox('Page', ['Home', 'About Us'])
+page = st.sidebar.radio('Page', ['Home', 'About Us'])
 if page == 'About Us':
        st.header('About Us')
        st.markdown(
