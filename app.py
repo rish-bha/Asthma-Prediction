@@ -1,5 +1,6 @@
 
 import os
+from PIL import Image
 import base64
 import joblib
 import pandas as pd
@@ -148,6 +149,8 @@ if page == 'About The App':
        )
 
        st.title("About The App")
+       banner = Image.open('assets/asthma.jpg')
+       st.image(banner, use_column_width=True)
        st.markdown(
               """
               ## **What this app does**
@@ -165,7 +168,7 @@ if page == 'About The App':
 
               """
        )
-       #st.stop()
+
 else:
        st.markdown(
        """
