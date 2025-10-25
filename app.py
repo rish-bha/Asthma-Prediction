@@ -224,7 +224,7 @@ else:
 
               prediction = model.predict(user_encoded)
               prediction = int(prediction[0])
-              st.subheader('Prediction Result:')
+              st.modar('Prediction Result:')
               st.write(f'Predicted Asthma Risk: {prediction}')
 
               if prediction >= 0 and prediction < 12:
