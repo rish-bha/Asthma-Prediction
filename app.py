@@ -75,6 +75,63 @@ header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
 
 _set_background_image()
 
+@st.dialog('Prediction Result:')
+def prediction_dialog(prediction=prediction):
+       st.write(f'Predicted Asthma Risk: {prediction}')
+
+       if prediction >= 0 and prediction < 12:
+              color = 'red'
+              status = scores_interpretation[0]
+       elif prediction >= 12 and prediction < 16:
+              color = 'orange'
+              status = scores_interpretation[1]
+       elif prediction >= 16 and prediction < 20:
+              color = 'yellow'
+              status = scores_interpretation[2]
+       elif prediction >= 20 and prediction <= 25:
+              color = 'green'
+              status = scores_interpretation[3]
+       else:
+              st.write("Invalid score")
+
+       st.markdown(
+       f"""
+       <style>
+       @keyframes pulse {{
+              0% {{ transform: scale(1); box-shadow: 0 0 10px {color}; }}
+              50% {{ transform: scale(1.03); box-shadow: 0 0 25px {color}; }}
+              100% {{ transform: scale(1); box-shadow: 0 0 10px {color}; }}
+       }}
+
+       .score-box {{
+              background-color: {color};
+              border-radius: 15px;
+              padding: 20px;
+              text-align: center;
+              animation: pulse 2s infinite;
+       }}
+
+       .score-text {{
+              color: black;
+              font-size: 36px;
+              font-weight: bold;
+              margin-bottom: 10px;
+       }}
+
+       .status-text {{
+              color: black;
+              font-size: 36px;
+              font-weight: 500;
+       }}
+       </style>
+
+       <div class="score-box">
+              <p class="score-text">Asthma Score: {prediction}</p>
+              <p class="status-text">Status: {status}</p>
+       </div>
+       """,
+       unsafe_allow_html=True
+       )
 
 # Simple multipage navigation (Home / About The App)
 page = st.sidebar.radio('Page', ['About The App', 'Get Your Score'])
@@ -191,6 +248,7 @@ else:
        outdoor_activities = st.selectbox('Outdoor Activities', outdoor_activities_options, index=2)
        smoking_habit = st.selectbox('Smoking Habit', smoking_habit_options, index=0)
 
+       
        if st.button('Predict'):
               temperature = (temperature - 32) * 5/9
               user_data = pd.DataFrame([{
@@ -224,59 +282,4 @@ else:
 
               prediction = model.predict(user_encoded)
               prediction = int(prediction[0])
-              with st.modal('Prediction Result:', key='modal_prediction'):
-                     st.write(f'Predicted Asthma Risk: {prediction}')
-
-                     if prediction >= 0 and prediction < 12:
-                            color = 'red'
-                            status = scores_interpretation[0]
-                     elif prediction >= 12 and prediction < 16:
-                            color = 'orange'
-                            status = scores_interpretation[1]
-                     elif prediction >= 16 and prediction < 20:
-                            color = 'yellow'
-                            status = scores_interpretation[2]
-                     elif prediction >= 20 and prediction <= 25:
-                            color = 'green'
-                            status = scores_interpretation[3]
-                     else:
-                            st.write("Invalid score")
-
-                     st.markdown(
-                     f"""
-                     <style>
-                     @keyframes pulse {{
-                            0% {{ transform: scale(1); box-shadow: 0 0 10px {color}; }}
-                            50% {{ transform: scale(1.03); box-shadow: 0 0 25px {color}; }}
-                            100% {{ transform: scale(1); box-shadow: 0 0 10px {color}; }}
-                     }}
-
-                     .score-box {{
-                            background-color: {color};
-                            border-radius: 15px;
-                            padding: 20px;
-                            text-align: center;
-                            animation: pulse 2s infinite;
-                     }}
-
-                     .score-text {{
-                            color: black;
-                            font-size: 36px;
-                            font-weight: bold;
-                            margin-bottom: 10px;
-                     }}
-
-                     .status-text {{
-                            color: black;
-                            font-size: 36px;
-                            font-weight: 500;
-                     }}
-                     </style>
-
-                     <div class="score-box">
-                            <p class="score-text">Asthma Score: {prediction}</p>
-                            <p class="status-text">Status: {status}</p>
-                     </div>
-                     """,
-                     unsafe_allow_html=True
-                     )
+              prediction_dialog(prediction)
