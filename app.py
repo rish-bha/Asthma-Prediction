@@ -161,7 +161,7 @@ else:
 
        # Pre-fill with weather data if available
        if weather_data:
-              st.write("Fetched current weather data for Fremont, CA")
+              st.write(f"Fetched current weather data for {city}, CA")
               default_humidity = weather_data.get('main', {}).get('humidity', default_humidity)
               default_pressure = weather_data.get('main', {}).get('pressure', default_pressure)
               # Convert Kelvin to Fahrenheit for temperature
@@ -174,7 +174,7 @@ else:
        wind_speed = st.number_input('Wind Speed', min_value=0, max_value=100, value=default_wind_speed)
        uvindex_default = 0
        if uvi_data:
-              st.write("Fetched current UV index data for Fremont, CA")
+              st.write(f"Fetched current UV index data for {city}, CA")
               uvi_value = uvi_data.get('value', 0)
               if uvi_value < 5:
                      uvindex_default = 0
