@@ -1,4 +1,6 @@
 
+import os
+import base64
 import joblib
 import pandas as pd
 import streamlit as st
@@ -13,8 +15,90 @@ encoder = joblib.load(encoder_path)
 scaler = joblib.load(scaler_path)
 model = joblib.load(model_path)
 
+def _set_background_image():
+       """If an image exists at `assets/background.jpg` or `background.jpg`, embed it
+       as the page background (base64) and add a semi-opaque overlay for readability.
+       If no file is found, show a small info hint with recommended dimensions.
+       """
+       candidates = [os.path.join('assets', 'background.jpg'), os.path.join('assets', 'background.png'), 'background.jpg', 'background.png']
+       img_path = None
+       for c in candidates:
+              if os.path.exists(c):
+                     img_path = c
+                     break
+
+       if not img_path:
+              st.info('No background image found. To add one, place your image at `assets/background.jpg` (recommended 1920x1080, <=300KB).')
+              return
+
+       try:
+              with open(img_path, 'rb') as f:
+                     data = f.read()
+              b64 = base64.b64encode(data).decode()
+              mime = 'image/png' if img_path.lower().endswith('.png') else 'image/jpeg'
+              css = f"""
+<style>
+/* full-page background */
+html, body, [data-testid="stAppViewContainer"] {{
+       height: 100%;
+}}
+.stApp {{
+       background-image: url('data:{mime};base64,{b64}');
+       background-size: cover;
+       background-position: center center;
+       background-attachment: fixed;
+       background-repeat: no-repeat;
+       -webkit-font-smoothing: antialiased;
+}}
+/* translucent container so content stays readable (less opaque to show background)
+   and avoid a solid white bar at the very top by keeping headers transparent. */
+.block-container {{
+       background: rgba(255,255,255,0.65) !important;
+       border-radius: 12px;
+       padding: 1rem 1.2rem;
+}}
+/* Streamlit header / toolbar — make transparent so nav blends with background */
+header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
+       background: transparent !important;
+       box-shadow: none !important;
+}}
+/* Make the page background behind the top bar visible */
+[data-testid="stAppViewContainer"] > div {{
+       background: transparent !important;
+}}
+</style>
+"""
+              st.markdown(css, unsafe_allow_html=True)
+       except Exception as e:
+              st.warning(f'Failed to load background image: {e}')
+
+
+_set_background_image()
+
 st.title('Asthma Prediction App')
-st.write('Enter your details to predict asthma risk:')
+
+# Simple multipage navigation (Home / About Us)
+page = st.sidebar.selectbox('Page', ['Home', 'About Us'])
+if page == 'About Us':
+       st.header('About Us')
+       st.markdown(
+              """
+              **What this app does**
+
+              This application predicts your asthma control score based on a short
+              questionnaire (age, gender, outdoor job/activities, smoking habit) and current
+              local weather conditions (temperature, humidity, pressure, wind speed, UV index).
+              This can help you take preventive measures to manage your asthma exacerbations.
+
+              **How to use**
+
+              1. Switch to the Home page.
+              2. Enter your city (the app will fetch local weather).
+              3. Fill out or review pre-filled questionnaire fields and click Predict to see the score.
+
+              """
+       )
+       st.stop()
 
 
 # Define options for categorical fields
