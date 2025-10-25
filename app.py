@@ -75,12 +75,11 @@ header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
 
 _set_background_image()
 
-st.title('Asthma Prediction App')
 
 # Simple multipage navigation (Home / About The App)
 page = st.sidebar.radio('Page', ['About The App', 'Get Your Score'])
 if page == 'About The App':
-       st.header('About The App')
+       st.title('About The App')
        st.markdown(
               """
               **What this app does**
@@ -100,7 +99,7 @@ if page == 'About The App':
        )
        #st.stop()
 else:
-       st.header('Get Your Asthma Control Score')
+       st.title('Get Your Asthma Control Score')
 
        # Define options for categorical fields
        age_options = ['Above 50', '41-50', '19-30', '31-40']
