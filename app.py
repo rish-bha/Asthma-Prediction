@@ -98,8 +98,8 @@ if page == 'About The App':
 
               """
        )
-       st.stop()
-elif page == 'Get Your Score':
+       #st.stop()
+else:
        st.header('Get Your Asthma Control Score')
 
        # Define options for categorical fields
