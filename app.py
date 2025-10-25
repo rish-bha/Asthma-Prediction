@@ -168,9 +168,13 @@ else:
               kelvin_temp = weather_data.get('main', {}).get('temp', 302.15)
               default_temperature = round((kelvin_temp - 273.15) * 9/5 + 32)
               default_wind_speed = round(weather_data.get('wind', {}).get('speed', default_wind_speed))
-
+       humidity = st.number_input('Humidity[%]', min_value=0, max_value=100, value=default_humidity)
+       pressure = st.number_input('Pressure[bar]', min_value=900, max_value=1100, value=default_pressure)
+       temperature = st.number_input('Temperature[°F]', min_value=-4, max_value=140, value=default_temperature)
+       wind_speed = st.number_input('Wind Speed', min_value=0, max_value=100, value=default_wind_speed)
        uvindex_default = 0
        if uvi_data:
+              st.write("Fetched current UV index data for Fremont, CA")
               uvi_value = uvi_data.get('value', 0)
               if uvi_value < 5:
                      uvindex_default = 0
@@ -179,17 +183,13 @@ else:
 
 
        # Streamlit input fields with pre-filled values
+       uvindex = st.selectbox('UV Index', uvindex_options, index=uvindex_default)
+       st.write("Fill out the following questionnaire:")
        age = st.selectbox('Age', age_options, index=2)
        gender = st.selectbox('Gender', gender_options, index=0)
        outdoor_job = st.selectbox('Outdoor Job', outdoor_job_options, index=0)
        outdoor_activities = st.selectbox('Outdoor Activities', outdoor_activities_options, index=2)
        smoking_habit = st.selectbox('Smoking Habit', smoking_habit_options, index=0)
-       uvindex = st.selectbox('UV Index', uvindex_options, index=uvindex_default)
-       humidity = st.number_input('Humidity[%]', min_value=0, max_value=100, value=default_humidity)
-       pressure = st.number_input('Pressure[bar]', min_value=900, max_value=1100, value=default_pressure)
-       temperature = st.number_input('Temperature[°F]', min_value=-4, max_value=140, value=default_temperature)
-       wind_speed = st.number_input('Wind Speed', min_value=0, max_value=100, value=default_wind_speed)
-
 
        if st.button('Predict'):
               temperature = (temperature - 32) * 5/9
