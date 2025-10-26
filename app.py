@@ -76,6 +76,83 @@ header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
 
 _set_background_image()
 
+
+def _inject_top_left_logo():
+       """Inject a non-invasive fixed top-left logo positioned to the left of the
+       centered Streamlit `.block-container` using a small JS placement helper.
+
+       This does not modify any existing container styles. The script computes the
+       left coordinate at runtime so the logo stays outside the white questionnaire
+       area even if the page is centered or resized. The logo is pointer-events:none
+       so it won't intercept any clicks.
+       """
+       candidates = [os.path.join('assets', 'easybreathenobg.png'), 'easybreathenobg.png']
+       img_path = None
+       for c in candidates:
+              if os.path.exists(c):
+                     img_path = c
+                     break
+
+       if not img_path:
+              return
+
+       try:
+              with open(img_path, 'rb') as f:
+                     data = f.read()
+              b64 = base64.b64encode(data).decode()
+              # Minimal JS to append an img and position it left of the centered container
+              js = f"""
+<style>#easybreathenobg_logo{{box-shadow:none;}}</style>
+<script>
+(function(){{
+  try{{
+    const imgSrc = 'data:image/png;base64,{b64}';
+    const logo = document.createElement('img');
+    logo.id = 'easybreathenobg_logo';
+    logo.src = imgSrc;
+    // fixed size to keep layout predictable
+    const logoWidth = 120;
+    logo.style.width = logoWidth + 'px';
+    logo.style.height = 'auto';
+    logo.style.position = 'fixed';
+    logo.style.top = '16px';
+    logo.style.zIndex = '9999';
+    logo.style.pointerEvents = 'none';
+    logo.style.transition = 'left 150ms ease-out';
+    // initial left; will be updated based on container position
+    logo.style.left = '12px';
+    document.body.appendChild(logo);
+
+    function placeLogo(){{
+      const container = document.querySelector('.block-container');
+      if(!container) return;
+      const rect = container.getBoundingClientRect();
+      // try to place logo just outside the left edge of the container
+      let left = Math.max(8, Math.floor(rect.left - logoWidth - 12));
+      // if computed left would push logo off-screen, clamp to 8px
+      if(left < 8) left = 8;
+      logo.style.left = left + 'px';
+    }}
+
+    // run shortly after load and on resize
+    setTimeout(placeLogo, 150);
+    window.addEventListener('resize', placeLogo);
+    // also attempt again when DOM changes (in case Streamlit re-renders)
+    const observer = new MutationObserver(function(){{ placeLogo(); }});
+    observer.observe(document.body, {{ childList: true, subtree: true }});
+  }}catch(e){{ /* ignore - non-critical */ }}
+}})();
+</script>
+"""
+              st.markdown(js, unsafe_allow_html=True)
+       except Exception:
+              # Non-fatal: if logo can't be read or injected, silently ignore
+              return
+
+
+# Inject logo after background so layering/order is predictable
+_inject_top_left_logo()
+
 @st.dialog('Prediction Result:')
 def prediction_dialog(prediction):
        st.write(f'Predicted Asthma Risk: {prediction}')
