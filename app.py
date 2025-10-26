@@ -91,7 +91,7 @@ def _render_brand():
        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
        font-weight: 700;
        letter-spacing: 1px;
-       font-size: 28px;
+       font-size: 48px;
        margin-bottom: 6px;
        text-align: center;
 }
