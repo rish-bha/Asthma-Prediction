@@ -76,6 +76,44 @@ header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
 
 _set_background_image()
 
+def _render_logo():
+       """Embed the site logo (if present at `assets/easybreathenobg.png`) as a fixed
+       overlay above all content (top center)."""
+       logo_candidates = [os.path.join('assets', 'easybreathenobg.png'), os.path.join('assets', 'easybreathenobg.jpg'), 'easybreathenobg.png']
+       logo_path = None
+       for p in logo_candidates:
+              if os.path.exists(p):
+                     logo_path = p
+                     break
+       if not logo_path:
+              return
+       try:
+              with open(logo_path, 'rb') as f:
+                     data = f.read()
+              b64 = base64.b64encode(data).decode()
+              mime = 'image/png' if logo_path.lower().endswith('.png') else 'image/jpeg'
+              logo_css = f"""
+              <style>
+              .logo-overlay {{
+                     position: fixed;
+                     top: 8px;
+                     left: 50%;
+                     transform: translateX(-50%);
+                     z-index: 9999;
+                     width: 260px;
+                     max-width: 40%;
+                     pointer-events: none;
+              }}
+              </style>
+              """
+              logo_html = f"<div class=\"logo-overlay\"><img src=\"data:{mime};base64,{b64}\" style=\"width:100%;height:auto;display:block;\"/></div>"
+              st.markdown(logo_css + logo_html, unsafe_allow_html=True)
+       except Exception:
+              return
+
+
+_render_logo()
+
 @st.dialog('Prediction Result:')
 def prediction_dialog(prediction):
        st.write(f'Predicted Asthma Risk: {prediction}')
