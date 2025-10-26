@@ -57,6 +57,7 @@ html, body, [data-testid="stAppViewContainer"] {{
        background: rgba(255,255,255,0.65) !important;
        border-radius: 12px;
        padding: 1rem 1.2rem;
+       margin-top: 120px; /* leave space for logo above the main content */
 }}
 /* Streamlit header / toolbar — make transparent so nav blends with background */
 header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
@@ -95,14 +96,16 @@ def _render_logo():
               logo_css = f"""
               <style>
               .logo-overlay {{
-                     position: fixed;
-                     top: 8px;
+                     /* place logo in the document flow so it scrolls with the page */
+                     position: relative;
+                     display: block;
+                     margin: 6px auto 0 auto;
                      left: 50%;
                      transform: translateX(-50%);
                      z-index: 9999;
                      width: 260px;
                      max-width: 40%;
-                     pointer-events: none;
+                     pointer-events: none; /* don't block clicks */
               }}
               </style>
               """
