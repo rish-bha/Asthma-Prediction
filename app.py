@@ -136,7 +136,7 @@ def prediction_dialog(prediction):
 
 # Simple multipage navigation (Home / About The App)
 page = st.sidebar.radio('Page', ['About The App', 'Home'])
-if page == 'Home':
+if page == 'About The App':
        st.markdown(
        """
        <style>
@@ -180,7 +180,7 @@ else:
        """,
        unsafe_allow_html=True
        )
-       st.title('Get Your Asthma Control Score')
+       st.title('Home - Asthma Control Score Prediction')
 
        # Define options for categorical fields
        age_options = ['Above 50', '41-50', '19-30', '31-40']
