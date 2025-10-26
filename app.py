@@ -50,18 +50,13 @@ html, body, [data-testid="stAppViewContainer"] {{
        background-attachment: fixed;
        background-repeat: no-repeat;
        -webkit-font-smoothing: antialiased;
-       position: relative;
 }}
-/* translucent container so content stays readable (less opaque to show background) */
+/* translucent container so content stays readable (less opaque to show background)
+   and avoid a solid white bar at the very top by keeping headers transparent. */
 .block-container {{
-       /* make the content container translucent but not cover the whole viewport */
-       background: rgba(255,255,255,0.15) !important;
+       background: rgba(255,255,255,0.65) !important;
        border-radius: 12px;
        padding: 1rem 1.2rem;
-       position: relative;
-       z-index: 2;
-       max-width: 1100px;
-       margin: 24px auto;
 }}
 /* Streamlit header / toolbar — make transparent so nav blends with background */
 header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
@@ -100,16 +95,14 @@ def _render_logo():
               logo_css = f"""
               <style>
               .logo-overlay {{
-                     /* place logo in the document flow so it scrolls with the page */
-                     position: relative;
-                     display: block;
-                     margin: 6px auto 0 auto;
+                     position: fixed;
+                     top: 8px;
                      left: 50%;
                      transform: translateX(-50%);
                      z-index: 9999;
                      width: 260px;
                      max-width: 40%;
-                     pointer-events: none; /* don't block clicks */
+                     pointer-events: none;
               }}
               </style>
               """
@@ -119,47 +112,7 @@ def _render_logo():
               return
 
 
-def _set_logo_background():
-       """Embed the logo into the page background (top-left) using a pseudo-element so
-       it sits behind the questionnaire but above the background image."""
-       logo_candidates = [os.path.join('assets', 'easybreathenobg.png'), os.path.join('assets', 'easybreathenobg.jpg'), 'easybreathenobg.png']
-       logo_path = None
-       for p in logo_candidates:
-              if os.path.exists(p):
-                     logo_path = p
-                     break
-       if not logo_path:
-              return
-       try:
-              with open(logo_path, 'rb') as f:
-                     data = f.read()
-              b64 = base64.b64encode(data).decode()
-              mime = 'image/png' if logo_path.lower().endswith('.png') else 'image/jpeg'
-              logo_css = f"""
-<style>
-/* place the logo in the top-left as part of the background (behind content) */
-.stApp::before {{
-       content: "";
-       position: absolute;
-       top: 16px;
-       left: 16px;
-       width: 220px;
-       height: 80px;
-       background-image: url('data:{mime};base64,{b64}');
-       background-size: contain;
-       background-repeat: no-repeat;
-       opacity: 0.95;
-       z-index: 1; /* behind .block-container (z-index:2) */
-       pointer-events: none;
-}}
-</style>
-"""
-              st.markdown(logo_css, unsafe_allow_html=True)
-       except Exception:
-              return
-
-
-_set_logo_background()
+_render_logo()
 
 @st.dialog('Prediction Result:')
 def prediction_dialog(prediction):
