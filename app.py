@@ -76,6 +76,33 @@ header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
 
 _set_background_image()
 
+
+def _render_brand():
+                      """Render the 'EasyBreathe' brand heading in cyan above page titles.
+
+                      Uses a clean sans-serif stack, modest letter-spacing and a subtle weight so
+                      it looks modern and unobtrusive. This function is intentionally minimal
+                      and safe to call multiple times.
+                      """
+                      css = """
+<style>
+.easybreathe-brand {
+       color: #00bcd4; /* cyan */
+       font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+       font-weight: 700;
+       letter-spacing: 1px;
+       font-size: 28px;
+       margin-bottom: 6px;
+       text-align: center;
+}
+@media (max-width: 600px) {
+       .easybreathe-brand { font-size: 22px; }
+}
+</style>
+"""
+                      st.markdown(css, unsafe_allow_html=True)
+                      st.markdown('<div class="easybreathe-brand">EasyBreathe</div>', unsafe_allow_html=True)
+
 @st.dialog('Prediction Result:')
 def prediction_dialog(prediction):
        st.write(f'Predicted Asthma Risk: {prediction}')
@@ -148,6 +175,7 @@ if page == 'About The App':
        unsafe_allow_html=True
        )
 
+       _render_brand()
        st.title("About The App")
        banner = Image.open('assets/asthma.jpg')
        st.image(banner, use_container_width=True)
@@ -180,6 +208,7 @@ else:
        """,
        unsafe_allow_html=True
        )
+       _render_brand()
        st.title('Home - Asthma Control Score Prediction')
 
        # Define options for categorical fields
