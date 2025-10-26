@@ -54,11 +54,14 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 /* translucent container so content stays readable (less opaque to show background) */
 .block-container {{
-       background: rgba(255,255,255,0.65) !important;
+       /* make the content container translucent but not cover the whole viewport */
+       background: rgba(255,255,255,0.15) !important;
        border-radius: 12px;
        padding: 1rem 1.2rem;
        position: relative;
        z-index: 2;
+       max-width: 1100px;
+       margin: 24px auto;
 }}
 /* Streamlit header / toolbar — make transparent so nav blends with background */
 header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
