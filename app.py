@@ -50,14 +50,15 @@ html, body, [data-testid="stAppViewContainer"] {{
        background-attachment: fixed;
        background-repeat: no-repeat;
        -webkit-font-smoothing: antialiased;
+       position: relative;
 }}
-/* translucent container so content stays readable (less opaque to show background)
-   and avoid a solid white bar at the very top by keeping headers transparent. */
+/* translucent container so content stays readable (less opaque to show background) */
 .block-container {{
        background: rgba(255,255,255,0.65) !important;
        border-radius: 12px;
        padding: 1rem 1.2rem;
-       margin-top: 120px; /* leave space for logo above the main content */
+       position: relative;
+       z-index: 2;
 }}
 /* Streamlit header / toolbar — make transparent so nav blends with background */
 header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
@@ -115,7 +116,47 @@ def _render_logo():
               return
 
 
-_render_logo()
+def _set_logo_background():
+       """Embed the logo into the page background (top-left) using a pseudo-element so
+       it sits behind the questionnaire but above the background image."""
+       logo_candidates = [os.path.join('assets', 'easybreathenobg.png'), os.path.join('assets', 'easybreathenobg.jpg'), 'easybreathenobg.png']
+       logo_path = None
+       for p in logo_candidates:
+              if os.path.exists(p):
+                     logo_path = p
+                     break
+       if not logo_path:
+              return
+       try:
+              with open(logo_path, 'rb') as f:
+                     data = f.read()
+              b64 = base64.b64encode(data).decode()
+              mime = 'image/png' if logo_path.lower().endswith('.png') else 'image/jpeg'
+              logo_css = f"""
+<style>
+/* place the logo in the top-left as part of the background (behind content) */
+.stApp::before {{
+       content: "";
+       position: absolute;
+       top: 16px;
+       left: 16px;
+       width: 220px;
+       height: 80px;
+       background-image: url('data:{mime};base64,{b64}');
+       background-size: contain;
+       background-repeat: no-repeat;
+       opacity: 0.95;
+       z-index: 1; /* behind .block-container (z-index:2) */
+       pointer-events: none;
+}}
+</style>
+"""
+              st.markdown(logo_css, unsafe_allow_html=True)
+       except Exception:
+              return
+
+
+_set_logo_background()
 
 @st.dialog('Prediction Result:')
 def prediction_dialog(prediction):
