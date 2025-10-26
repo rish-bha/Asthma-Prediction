@@ -76,6 +76,44 @@ header, [data-testid="stToolbar"], [data-testid="stHeader"] {{
 
 _set_background_image()
 
+def _render_logo_fixed():
+       """Render the EasyBreathe logo as a fixed element in the top-left corner.
+       Uses a base64 data URI so it displays correctly when the app is deployed.
+       """
+       logo_path = os.path.join('assets', 'easybreathenobg.png')
+       if not os.path.exists(logo_path):
+              return
+       try:
+              with open(logo_path, 'rb') as f:
+                     data = f.read()
+              b64 = base64.b64encode(data).decode()
+              mime = 'image/png'
+              css = f"""
+<style>
+/* fixed logo top-left */
+.easybreathe-logo {{
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 160px;
+  max-width: 20%;
+  z-index: 99999;
+  pointer-events: none; /* don't block clicks */
+}}
+/* add safe spacing so content doesn't sit under the logo */
+.block-container {{
+  padding-top: 84px !important;
+}}
+</style>
+<div class="easybreathe-logo"><img src="data:{mime};base64,{b64}" style="width:100%;height:auto;display:block;"/></div>
+"""
+              st.markdown(css, unsafe_allow_html=True)
+       except Exception:
+              return
+
+
+_render_logo_fixed()
+
 @st.dialog('Prediction Result:')
 def prediction_dialog(prediction):
        st.write(f'Predicted Asthma Risk: {prediction}')
