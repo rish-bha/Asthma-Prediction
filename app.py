@@ -135,8 +135,8 @@ def prediction_dialog(prediction):
        )
 
 # Simple multipage navigation (Home / About The App)
-page = st.sidebar.radio('Page', ['About The App', 'Get Your Score'])
-if page == 'About The App':
+page = st.sidebar.radio('Page', ['About The App', 'Home'])
+if page == 'Home':
        st.markdown(
        """
        <style>
